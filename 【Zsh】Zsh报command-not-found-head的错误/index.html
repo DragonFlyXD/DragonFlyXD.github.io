@@ -101,7 +101,7 @@
 1export PATH=/Users/chenlongfei/Documents/mygo/bin
 结果打开Zsh后爆炸了，先是出现如下所示警告：
 123456/Users/chenlongfei/.oh-my-zsh/oh-my-zsh.">
-<meta property="og:updated_time" content="2017-05-14T12:11:55.000Z">
+<meta property="og:updated_time" content="2017-05-14T12:14:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Zsh】Zsh报command not found: head的错误">
 <meta name="twitter:description" content="使用Golang的Beego框架的时候，装了它的命令行工具bee ，添加环境变量的时候出了问题。
@@ -360,7 +360,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  347
+                  351
                 </span>
               
 
@@ -407,7 +407,8 @@
 </blockquote>
 <a id="more"></a>
 <p>后经一番排查 ，原来是我将 <strong>PATH</strong> 指定成唯一的，从而检索不到其他目录的命令。</p>
-<p>如 <code>export PATH=/Users/chenlongfei/Documents/mygo/bin</code> ，在<strong>Zsh</strong>输入命令后只会在 <code>/Users/chenlongfei/Documents/mygo/bin</code> 该路径下找，因此会提示找不到命令。</p>
+<p>如 <code>export PATH=/Users/chenlongfei/Documents/mygo/bin</code> 这样设置后。</p>
+<p>在<strong>Zsh</strong>输入命令后只会在 <code>/Users/chenlongfei/Documents/mygo/bin</code> 路径下找，因此会提示找不到命令。</p>
 <hr>
 <p>正确的设置方法应该是在<strong>路径前</strong>或<strong>路径后</strong>添加 <code>$PATH</code> 变量。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export PATH=$PATH:/Users/chenlongfei/Documents/mygo/bin</div></pre></td></tr></table></figure>
