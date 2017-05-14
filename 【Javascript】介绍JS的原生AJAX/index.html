@@ -1,0 +1,891 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=monaco:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Javascript," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="不使用AJAX实现无刷新效果http协议的204特性
+header(&amp;#39;HTTP/1.1 204 No Content&amp;#39;);
+当浏览器收到204状态码时，表示请求无任何内容，页面不过跳转。
+图片的src属性img.setAttribute(&amp;#39;src&amp;#39;, &amp;#39;./01_vote.php&amp;#39;);
+利用图片加载的特性,设置src属性时，浏览器将会请求src对应的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Javascript】介绍JS的原生AJAX">
+<meta property="og:url" content="http://chenlongfei.me/【Javascript】介绍JS的原生AJAX/index.html">
+<meta property="og:site_name" content="LongFei Chen">
+<meta property="og:description" content="不使用AJAX实现无刷新效果http协议的204特性
+header(&amp;#39;HTTP/1.1 204 No Content&amp;#39;);
+当浏览器收到204状态码时，表示请求无任何内容，页面不过跳转。
+图片的src属性img.setAttribute(&amp;#39;src&amp;#39;, &amp;#39;./01_vote.php&amp;#39;);
+利用图片加载的特性,设置src属性时，浏览器将会请求src对应的">
+<meta property="og:image" content="http://chenlongfei.me/油漆刷.png">
+<meta property="og:updated_time" content="2017-03-28T08:28:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Javascript】介绍JS的原生AJAX">
+<meta name="twitter:description" content="不使用AJAX实现无刷新效果http协议的204特性
+header(&amp;#39;HTTP/1.1 204 No Content&amp;#39;);
+当浏览器收到204状态码时，表示请求无任何内容，页面不过跳转。
+图片的src属性img.setAttribute(&amp;#39;src&amp;#39;, &amp;#39;./01_vote.php&amp;#39;);
+利用图片加载的特性,设置src属性时，浏览器将会请求src对应的">
+<meta name="twitter:image" content="http://chenlongfei.me/油漆刷.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://chenlongfei.me/【Javascript】介绍JS的原生AJAX/"/>
+
+
+
+
+
+  <title> 【Javascript】介绍JS的原生AJAX | LongFei Chen </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LongFei Chen</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Thunder In Everyone Of Us.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://chenlongfei.me/【Javascript】介绍JS的原生AJAX/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LongFei Chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/smile_face_400.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LongFei Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                【Javascript】介绍JS的原生AJAX
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-28T14:16:24+08:00">
+                2017-03-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">Javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  2,281
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="不使用AJAX实现无刷新效果"><a href="#不使用AJAX实现无刷新效果" class="headerlink" title="不使用AJAX实现无刷新效果"></a>不使用AJAX实现无刷新效果</h2><p><strong>http协议的204特性</strong></p>
+<p><code>header(&#39;HTTP/1.1 204 No Content&#39;);</code></p>
+<p>当浏览器收到204状态码时，表示请求无任何内容，页面不过跳转。</p>
+<p><strong>图片的src属性</strong><br><code>img.setAttribute(&#39;src&#39;, &#39;./01_vote.php&#39;);</code></p>
+<p>利用图片加载的特性,设置src属性时，浏览器将会请求src对应的资源。</p>
+<a id="more"></a>
+<p><strong>利用iframe</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;form action=&quot;02_reg.php&quot; method=&quot;post&quot; target=&quot;regzone&quot;&gt;</div><div class="line">    &lt;p&gt;用户名:&lt;input type=&quot;text&quot; name=&quot;username&quot;&gt;&lt;/p&gt;</div><div class="line">    &lt;p&gt;邮件地址:&lt;input type=&quot;text&quot; name=&quot;email&quot; &gt;&lt;/p&gt;</div><div class="line">    &lt;p&gt;&lt;input type=&quot;submit&quot; value=&quot;注册&quot;&gt;&lt;/p&gt;</div><div class="line">&lt;/form&gt;</div><div class="line">&lt;iframe width=&quot;0&quot; height=&quot;0&quot; frameborder=&quot;0&quot; name=&quot;regzone&quot;&gt;&lt;/iframe&gt;</div></pre></td></tr></table></figure>
+<p>将表单的target属性指向iframe，再将iframe隐藏。</p>
+<p><strong>Summary</strong></p>
+<ul>
+<li>在不使用XMLHttpRequest对象的情况下，我们依然可以用Javascript来实现对后台服务的请求，同时不带来页面的刷新或跳转。</li>
+<li>所谓AJAX，即页面在不刷新的情况下，利用XMLHttpRequest发送HTTP请求。</li>
+<li>不过以上方法是单向通信的，即只能发送请求，而得不到响应的结果。</li>
+</ul>
+<p><strong>思考：AJAX上传文件能实现吗？</strong></p>
+<ol>
+<li>从HTTP协议的角度来看，上传文件，则要把文件的内容发送到服务器。如果可以，XMLHttpRequest对象在POST数据时，把文件的内容也发送过去。</li>
+<li>—&gt;XHR对象获取了你要上传的文件的内容。</li>
+<li>-&gt;Javascript读取了你本地文件的内容。</li>
+<li>-&gt;出于安全原因，Javascript是不能够读取到文件内容的。</li>
+</ol>
+<ul>
+<li><strong>AJAX上传文件是无法实现的</strong>。</li>
+<li>不过通过其他方法可以:<ol>
+<li>用iframe,即简单的添加个上传文件的input框。</li>
+<li>利用flash实现，如SWFUpload工具。</li>
+<li>用html5实现，html5已经增加了文件读取api，使AJAX上传文件有了理论上的可能。</li>
+</ol>
+</li>
+</ul>
+<h2 id="AJAX的入门"><a href="#AJAX的入门" class="headerlink" title="AJAX的入门"></a>AJAX的入门</h2><p><strong>Description</strong></p>
+<ul>
+<li><p>XMLHttpRequest(以下简称XHR)对象,一个专门发送HTTP请求的工具。</p>
+</li>
+<li><p>创建XHR对象。虽然XHR最早脱胎于IE，但低版本IE的创建方式与其他游览器不一样。</p>
+<ol>
+<li><p>一般标准：new XMLHttpRequest()即可得到。</p>
+</li>
+<li><p>兼容低版本IE(6及6之前)，new ActiveXObject(‘Microsoft.XMLHTTP’)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function createXHR() &#123;</div><div class="line">      var xhr = null;</div><div class="line">      if (window.XMLHttpRequest) &#123;</div><div class="line">          xhr = new XMLHttpRequest();</div><div class="line">      &#125; else if (window.ActiveXObject) &#123;</div><div class="line">          xhr = new ActiveXObject(&apos;Microsoft.XMLHTTP&apos;);</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      return xhr;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+</ol>
+</li>
+<li><p>AJAX创建过程</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">      function vote() &#123;</div><div class="line">        //1.制造xhr</div><div class="line">        var xhr = createXHR();</div><div class="line">       </div><div class="line">        //2.打开连接</div><div class="line">        xhr.open(&apos;GET&apos;, &apos;./01_vote.php&apos;, true);</div><div class="line">        /**</div><div class="line">*   open方法,创建一个新的http请求,以下介绍各个参数的要求。</div><div class="line">*   1. 请求方式,一般用get或者post,即与表单的method填的方法类似。</div><div class="line">*   2. 请求的URL。</div><div class="line">*   3. 请求是否同步进行还是异步进行,true表示异步。默认为true。</div><div class="line">         */</div><div class="line"></div><div class="line">//3.发请求</div><div class="line">xhr.send(null);</div><div class="line">/**</div><div class="line">*  调用open方法只是传递参数而已,调用了send方法才会发送请求。</div><div class="line">*  利用get方法发送请求时参数是null。</div><div class="line">    */</div><div class="line"></div><div class="line">alert(&apos;hello&apos;);</div><div class="line">/**</div><div class="line">* 在01_vote.php中有一个sleep(3),等待3秒的方法。</div><div class="line">* 例如,同步进行alert弹框要等3秒后才能出现。</div><div class="line">* 而选择异步进行的话hello一开始就出现在视口了。</div><div class="line">* 因为同步进行必须等send发送后得到响应了才会执行下面的代码。</div><div class="line">* 而异步进行的话,不必等服务器响应,直接运行下面代码。</div><div class="line">  */</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+</code></pre><p>  <strong>这时候，你可能要问了，如果服务器完成了请求，那我该怎么知道这个变化呢？</strong></p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">*    XHR对象在请求与响应过程中，状态会不断变化(0-4)逐步变化。</div><div class="line"></div><div class="line">*    我们可以绑定一个函数，监听状态的变化，只要状态变化，就触发某函数。</div></pre></td></tr></table></figure>
+<pre><code>xhr.onreadystatechange=function () {
+  console.log(this.readyState);
+  if (this.readyState==4){
+      alert(&apos;请求完成了!&apos;);
+  }
+}
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">*    XHR的readState状态最终变到4时，意味着请求完毕了。</div><div class="line"></div><div class="line">## XHR对象的详细探讨</div><div class="line"></div><div class="line">**XHR的详细属性**</div><div class="line"></div><div class="line">* responseText:服务器响应的主体信息，body信息。</div><div class="line">* responseXML:对于大量的格式化文档，可以用XML来传输或交换，由后台程序把数据封装在XML文档时，js接收XMLXML对象并解析该内容。</div><div class="line">* status:是服务器的返回状态码。例如：200，成功；403，forbidden 禁止；404 not found 未找到；50X系列，内部服务器错误。</div><div class="line">* statusText:服务器返回的状态码，对应的文字描述。</div><div class="line">* readyState:XMLHttpRequest对象自身的状态码，0-4。</div><div class="line">* onreadystatechange:事件属性，绑定当XHR对象的状态发生变化时，回调的函数。</div><div class="line"></div><div class="line">**XHR的详细方法**</div><div class="line"></div><div class="line">* open(请求方式、url、同步/异步):创建http请求。false-&gt;同步，true-&gt;异步，默认为true。</div><div class="line">* send(null/参数)：发送http请求。参数写法，k1=v1&amp;k2=v2&amp;kn=vn。</div><div class="line">* setRequestHeader(key,value):设置请求的头信息。</div><div class="line">* Abort:忽略，不要在进行下去了，到此为止。</div><div class="line">* getResponseHeader(key):获取响应的某个头信息。</div><div class="line">* getAllResponseHeader:获取响应的所有头信息。 </div><div class="line"></div><div class="line">**Description**</div></pre></td></tr></table></figure>
+</code></pre></li>
+</ul>
+<p>HTTP/1.1 200 OK    //响应行<br>//响应头<br>Connection:Keep-Alive<br>Content-Length:5<br>Content-Type:text/html; charset=UTF-8<br>Date:Sun, 20 Nov 2016 19:18:31 GMT<br>Keep-Alive:timeout=5, max=97<br>Server:Apache<br>X-Powered-By:PHP/7.0.8</p>
+<p>Hello        //响应主体<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">* 服务器返回的信息大体分为三个部分，响应行、响应头、响应主体。</div><div class="line">* 200为http协议的状态码(status),而OK则为对应状态码的描述(statusText)。</div><div class="line">* Hello(responseText)为响应的主体信息。</div><div class="line">* 如果用原生的js向服务器传递信息，一定要设置头信息的Content-Type为application/x-www-form-urlencoded;</div><div class="line"></div><div class="line">**返回值类型**</div><div class="line"></div><div class="line">* 如果不考虑HTML5的最新标准，返回值只有普通文本和xml文档。</div><div class="line">* 作为普通文件返回类型时，又有以下几种常用的变通形式：</div><div class="line">  1. 返回简短的标志字符串，如，0、1、ok、hello等。</div><div class="line">  2. 后台返回大段的html代码，直接innerHTML到前段页面。</div><div class="line">  3. json格式，再有js解析。</div><div class="line">  4. 返回jsonp(跨域的时候好使)。</div><div class="line">* XMLHttpRequest返回的状态码:(状态码，名称，描述)</div><div class="line">  1. 0;unsent;初始化状态。XML对象已创建或已被abort()方法重置。</div><div class="line">  2. 1;opened;open()方法已调用，但请求没还有被发送。此时，可以调用send和setRequestHeader方法。</div><div class="line">  3. 2;Headers_Received;所有的响应头信息已经被接收。</div><div class="line">  4. 3;Loading;响应主体信息被接受。</div><div class="line">  5. 4;Done;成功。</div><div class="line"></div><div class="line">## HTML5与AJAX</div><div class="line"></div><div class="line">**iframe模拟Ajax文件上传效果**</div></pre></td></tr></table></figure></p>
+<p>/**</p>
+<ul>
+<li>1.捕捉表单提交的动作</li>
+<li>2.创建一个iframe</li>
+<li>3.把表单的target修改指向为该iframe</li>
+<li>4.去掉这个iframe<br>*/<br>function ajaxup() {<br>var ifname=’up’+Math.random();<br>$(‘<iframe name="'+ifname+'" width="0" height="0" frameborder="0"></iframe>‘).appendTo($(‘body’));<br>$(‘form:first’).attr(‘target’,ifname);<br>$(‘#progress’).html(‘<img src="油漆刷.png">‘)<br>}<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">**用HTML5的XHR2+FILE API +FormData**</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>/**</p>
+<ul>
+<li>formdata 表单数据</li>
+<li>这是在html5中新增的一个api</li>
+<li>它能以表单对象做参数,自动的把表单的数据打包</li>
+<li>当ajax发送数据时,发送些formdata,从而达到发送表单内各数据项的目的<br>*/<br>function send() {<br>var fd=new FormData($(‘#tform’).get(0));<br>var fd2=new FormData();<br>var xhr=new XMLHttpRequest();<br>xhr.open(‘POST’,’./test_form.php’,true);<br>xhr.onreadystatechange=function () {<br>if (this.readyState==4){<pre><code>$(&apos;#debug&apos;).html(this.responseText);
+</code></pre>}<br>}<br>//xhr.send(fd);   //发送表单数据</li>
+</ul>
+<p>//无表单时,formdata可以手动添加数据<br>fd2.append(‘username’,’dragonfly’);<br>fd2.append(‘aga’,’20’);<br>xhr.send(fd2);</p>
+<p>var fd=new FormData();<br>var pic=$(“input[name=’pic’]”).get(0).files[0];<br>//添加files属性后，会生了一个filelist对象,而里面又是一个个文件对象<br>fd.append(pic.name,pic);    //将文件追加到表单数据里<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">**XHR.upload对象的一些方法**</div><div class="line"></div><div class="line">*    progress,用来返回进度信息。注意，下载时返回的progress方法属于XHR对象，而不是XHR.upload对象。</div></pre></td></tr></table></figure></p>
+<pre><code>xhr.upload.onprogress = function (e) {
+  if (e.lengthComputable) {
+    var percent = parseInt(100 * e.loaded / e.total);
+    $(&apos;#bar&apos;).css({&apos;width&apos;:percent+&quot;%&quot;,&apos;textAlign&apos;:&apos;center&apos;}).
+    html(percent+&apos;%&apos;);
+  }
+}
+/**
+* 上传过程中,会产生一个XMLHttprequestProgressEvent对象,用于记录上传文件的信息
+* 它其中有几个属性十分重要,如下:
+* bubbles,是否冒泡
+* lengthcomputable,如果为true,说明文件可计算,否则文件不可计算,例如动态生成的
+* loaded,当前上传文件的大小,单位字节
+* total,文件总大小,单位字节
+*/
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">*    abort,传输被用户取消。</div><div class="line"></div><div class="line">*    error,传输中出现错误。</div><div class="line"></div><div class="line">*    loadstart,传输开始。</div><div class="line"></div><div class="line">*    loadend,传输结束。但不知道是成功还是失败。</div><div class="line"></div><div class="line">**跨域问题**</div><div class="line"></div><div class="line">在HTML5中，能实现ajax的跨域。不过有一定的规则约束，能否跨域取决于对应回答。对方服务器如果愿意接收远程过来的ajax，或某几个域过来的ajax请求，可以在header头信息里，加Access-Control-Allow-Origin。</div><div class="line"></div><div class="line">**大文件切割上传**</div></pre></td></tr></table></figure>
+</code></pre><p>//前端<br>function sendfile() {<br>  const LENGTH = 10 <em> 1024 </em> 1024;  //每段文件上传大小为10mb<br>  var start = 0,<br>  end = start + LENGTH,   //截取文件的开始和结束<br>  blob = null,    //二进制对象<br>  fd = null,      //表单数据<br>  xhr = null,     //XHR对象<br>  movies = $(‘#movies’).get(0).files[0], //file对象<br>  totalsize = movies.size;    //上传文件大小<br>  while (start &lt; totalsize) {<br>  blob = movies.slice(start, end);<br>  fd = new FormData();<br>  fd.append(‘part’, blob); //把每段数据追加给fd</p>
+<p>  xhr = new XMLHttpRequest();<br>  xhr.open(‘POST’, ‘test_form.php’, false);   //打开连接<br>  xhr.send(fd);       //发送数据</p>
+<p>  start = end;<br>  end += LENGTH;<br>  }<br>}</p>
+<p>/**</p>
+<ul>
+<li>添加files属性后,会产生一个filelist的集合,而集合里是一个个file对象。</li>
+<li>file对象里储存了文件的相关信息,如:</li>
+<li>size,文件的大小,单位为字节</li>
+<li>type,文件的类型</li>
+<li><strong>proto</strong>:file-&gt;<strong>proto</strong>:Blob-&gt;silce,借助这个方法实现文件的切割<br>*/</li>
+</ul>
+<p>//后端<br>//接收文件并合并<br>if (!file_exists(‘up.wmv’)){<br>    move_uploaded_file($_FILES[‘part’][‘tmp_name’],’up.wmv’);<br>}else{<br>    file_put_contents(‘up.wmv’,file_get_contents($_FILES[‘part’][‘tmp_name’]),FILE_APPEND);<br>}<br>```</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Javascript/" rel="tag"># Javascript</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/【Javascript】检测变量与对象的类型/" rel="next" title="【Javascript】检测变量与对象的类型">
+                <i class="fa fa-chevron-left"></i> 【Javascript】检测变量与对象的类型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/【Javascript】部分容易忘却的基础/" rel="prev" title="【Javascript】部分容易忘却的基础">
+                【Javascript】部分容易忘却的基础 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/smile_face_400.png"
+               alt="LongFei Chen" />
+          <p class="site-author-name" itemprop="name">LongFei Chen</p>
+           
+              <p class="site-description motion-element" itemprop="description">关于编程、生活、兴趣的个人博客</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/DragonFlyXD" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.dragonflyxd.com" target="_blank" title="诗词小筑">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  诗词小筑
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#不使用AJAX实现无刷新效果"><span class="nav-number">1.</span> <span class="nav-text">不使用AJAX实现无刷新效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AJAX的入门"><span class="nav-number">2.</span> <span class="nav-text">AJAX的入门</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LongFei Chen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

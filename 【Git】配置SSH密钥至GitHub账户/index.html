@@ -1,0 +1,830 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=monaco:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Git SSH," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="配置SSH密钥至自己的Github账户，这样不用每次push东西到github的仓库上都要输入github的账号密码。
+好，现在进入配置流程。
+
+注意，这是在Mac上的配置流程。大体与win下相似，些许不同在文末列出。
+
+
+检验是否配置过github的ssh密钥。
+1234// 跳转至 ~/.ssh 目录下cd ~/.ssh// 打印目录下所有文件ls -al
+12-rw-------   1 c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Git】配置SSH密钥至GitHub账户">
+<meta property="og:url" content="http://chenlongfei.me/【Git】配置SSH密钥至GitHub账户/index.html">
+<meta property="og:site_name" content="LongFei Chen">
+<meta property="og:description" content="配置SSH密钥至自己的Github账户，这样不用每次push东西到github的仓库上都要输入github的账号密码。
+好，现在进入配置流程。
+
+注意，这是在Mac上的配置流程。大体与win下相似，些许不同在文末列出。
+
+
+检验是否配置过github的ssh密钥。
+1234// 跳转至 ~/.ssh 目录下cd ~/.ssh// 打印目录下所有文件ls -al
+12-rw-------   1 c">
+<meta property="og:image" content="http://images.dragonflyxd.com/blog/github-ssh1.png">
+<meta property="og:image" content="http://images.dragonflyxd.com/blog/github-ssh2.png">
+<meta property="og:updated_time" content="2017-04-11T09:21:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Git】配置SSH密钥至GitHub账户">
+<meta name="twitter:description" content="配置SSH密钥至自己的Github账户，这样不用每次push东西到github的仓库上都要输入github的账号密码。
+好，现在进入配置流程。
+
+注意，这是在Mac上的配置流程。大体与win下相似，些许不同在文末列出。
+
+
+检验是否配置过github的ssh密钥。
+1234// 跳转至 ~/.ssh 目录下cd ~/.ssh// 打印目录下所有文件ls -al
+12-rw-------   1 c">
+<meta name="twitter:image" content="http://images.dragonflyxd.com/blog/github-ssh1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://chenlongfei.me/【Git】配置SSH密钥至GitHub账户/"/>
+
+
+
+
+
+  <title> 【Git】配置SSH密钥至GitHub账户 | LongFei Chen </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LongFei Chen</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Thunder In Everyone Of Us.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://chenlongfei.me/【Git】配置SSH密钥至GitHub账户/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LongFei Chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/smile_face_400.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LongFei Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                【Git】配置SSH密钥至GitHub账户
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-02T19:55:31+08:00">
+                2017-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Git/" itemprop="url" rel="index">
+                    <span itemprop="name">Git</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  648
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>配置SSH密钥至自己的Github账户，这样不用每次push东西到github的仓库上都要输入github的账号密码。</p>
+<p>好，现在进入配置流程。</p>
+<blockquote>
+<p>注意，这是在Mac上的配置流程。大体与win下相似，些许不同在文末列出。</p>
+</blockquote>
+<ul>
+<li><p>检验是否配置过github的ssh密钥。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 跳转至 ~/.ssh 目录下</div><div class="line">cd ~/.ssh</div><div class="line">// 打印目录下所有文件</div><div class="line">ls -al</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-rw-------   1 chenlongfei  staff  3326  4  2 19:03 github_rsa</div><div class="line">-rw-r--r--   1 chenlongfei  staff   753  4  2 19:03 github_rsa.pub</div></pre></td></tr></table></figure>
+<p>若出现 <code>github_rsa(私钥)</code> 与 <code>github_rsa.pub(公钥)</code> ，则说明已配置过了，则可以跳过下面配置新的SSH密钥的过程。</p>
+<blockquote>
+<p>密钥的名字是生成时自定义的，默认为id_rsa。</p>
+</blockquote>
+<a id="more"></a>
+</li>
+<li><p>配置一个新的SSH密钥。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa -b 4096 -C“ dragonfly920130@outlook.com ”</div></pre></td></tr></table></figure>
+<p>将<strong>dragonfly920130@outlook.com</strong>替换成自己的github的邮箱。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// 输入密钥的名字，默认id_rsa</div><div class="line">Enter file in which to save the key(/Users/chenlongfei/.ssh/id_rsa):</div><div class="line">// 设置密钥的密码，默认为空</div><div class="line">Enter passphrase (empty for no passphrase):</div><div class="line">// 再次输入</div><div class="line">Enter same passphrase again:</div></pre></td></tr></table></figure>
+<p>若出现如下代码，说明已经生成成功了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Your identification has been saved in /Users/chenlongfei/.ssh/id_rsa.</div><div class="line">Your public key has been saved in /Users/chenlongfei/.ssh/id_rsa.pub.</div><div class="line">...</div></pre></td></tr></table></figure>
+</li>
+<li><p>将SSH私钥添加进ssh代理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-add -K github_rsa</div></pre></td></tr></table></figure>
+<p>若设置过ssh密钥密码，会提示你输入密码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Enter passphrase for github_rsa:</div></pre></td></tr></table></figure>
+<p>输入成功后，若出现如下代码，说明已添加成功。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Passphrase stored in keychain: github_rsa</div><div class="line">Identity added: github_rsa (github_rsa)</div></pre></td></tr></table></figure>
+</li>
+<li><p>将SSH密钥添加进自己的Github账户上。</p>
+<p>进入 <code>settings/SSH and GPG keys</code> ，新建 <code>SSH key</code>。</p>
+<p><img src="http://images.dragonflyxd.com/blog/github-ssh1.png" alt=""></p>
+<p><strong>Title</strong>可以谁便输，代表的是SSH密钥的显示名称。下面的<strong>key</strong>为公钥内容，即 <code>github_ras.pub</code> 的内容。</p>
+<p><code>cat github_rsa.pub</code> 后复制公钥内容，添加进输入框内。</p>
+<p><img src="http://images.dragonflyxd.com/blog/github-ssh2.png" alt=""></p>
+<p>最后点击<strong>Add SSH key</strong>就ok了。</p>
+</li>
+<li><p>测试SSH密钥是否设置成功。</p>
+<p>在终端输入 <code>ssh -T git@github.com</code> 。</p>
+<p>若显示如下代码，则说明配置成功。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Hi xxx! You&apos;ve successfully authenticated, but GitHub does not provide shell access.</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<p>以下列出在<strong>win</strong>下配置时的注意项：</p>
+<ul>
+<li><p>部署时要注意安装<strong>git</strong>时的基础配置，如<strong>git操作</strong>是否仅用于<strong>git bash</strong>，而不能在<strong>git command</strong>等。</p>
+<blockquote>
+<p>git安装默认是仅用于git bash，若是默认配置，则部署时要在git bash上操作才行。</p>
+</blockquote>
+</li>
+<li><p>添加生成<strong>SSH密钥</strong>，需要比<strong>Mac</strong>多出几步操作，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// 启用 ssh-agent</div><div class="line">eval &quot;$(ssh-agent -s)&quot;</div><div class="line">// 把bash挂到ssh-agent下</div><div class="line">ssh-agent bash</div><div class="line">// 添加ssh密钥进ssh代理</div><div class="line">ssh-add github_rsa</div></pre></td></tr></table></figure>
+<p>若是出现 <code>Could not open a connection to your authentication agent</code> 的错误。</p>
+<p>则说明你没有执行 <code>ssh-agent bash</code> 这条命令。 </p>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Git-SSH/" rel="tag"># Git SSH</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/【Hexo】部署时出现Permission-Denied/" rel="next" title="【Hexo】部署时出现Permission Denied">
+                <i class="fa fa-chevron-left"></i> 【Hexo】部署时出现Permission Denied
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/【Python】urllib包的基本使用/" rel="prev" title="【Python】urllib包的基本使用">
+                【Python】urllib包的基本使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/smile_face_400.png"
+               alt="LongFei Chen" />
+          <p class="site-author-name" itemprop="name">LongFei Chen</p>
+           
+              <p class="site-description motion-element" itemprop="description">关于编程、生活、兴趣的个人博客</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/DragonFlyXD" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.dragonflyxd.com" target="_blank" title="诗词小筑">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  诗词小筑
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LongFei Chen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

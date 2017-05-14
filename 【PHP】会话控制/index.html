@@ -1,0 +1,846 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=monaco:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="PHP," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Background
+HTTP是无状态的协议，这是说，HTTP协议没有一个内建机制来维护两个事物之间的状态。当一个用户在请求一个页面后再去请求另一个页面，HTTP将无法告诉我们这两个请求是来自同一个用户。
+会话控制的思想是指能够在网站中根据一个会话跟踪用户。如果我们做到了这一点，对于用户登录的支持就很容易做到，并根据其授权级别和个人喜好来显示相应的内容。
+PHP的会话是通过唯一的会话ID来驱动的，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【PHP】会话控制">
+<meta property="og:url" content="http://chenlongfei.me/【PHP】会话控制/index.html">
+<meta property="og:site_name" content="LongFei Chen">
+<meta property="og:description" content="Background
+HTTP是无状态的协议，这是说，HTTP协议没有一个内建机制来维护两个事物之间的状态。当一个用户在请求一个页面后再去请求另一个页面，HTTP将无法告诉我们这两个请求是来自同一个用户。
+会话控制的思想是指能够在网站中根据一个会话跟踪用户。如果我们做到了这一点，对于用户登录的支持就很容易做到，并根据其授权级别和个人喜好来显示相应的内容。
+PHP的会话是通过唯一的会话ID来驱动的，">
+<meta property="og:updated_time" content="2017-03-28T08:31:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【PHP】会话控制">
+<meta name="twitter:description" content="Background
+HTTP是无状态的协议，这是说，HTTP协议没有一个内建机制来维护两个事物之间的状态。当一个用户在请求一个页面后再去请求另一个页面，HTTP将无法告诉我们这两个请求是来自同一个用户。
+会话控制的思想是指能够在网站中根据一个会话跟踪用户。如果我们做到了这一点，对于用户登录的支持就很容易做到，并根据其授权级别和个人喜好来显示相应的内容。
+PHP的会话是通过唯一的会话ID来驱动的，">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://chenlongfei.me/【PHP】会话控制/"/>
+
+
+
+
+
+  <title> 【PHP】会话控制 | LongFei Chen </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LongFei Chen</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Thunder In Everyone Of Us.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://chenlongfei.me/【PHP】会话控制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LongFei Chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/smile_face_400.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LongFei Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                【PHP】会话控制
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-28T15:04:23+08:00">
+                2017-03-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1,769
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><ul>
+<li>HTTP是无状态的协议，这是说，HTTP协议没有一个内建机制来维护两个事物之间的状态。当一个用户在请求一个页面后再去请求另一个页面，HTTP将无法告诉我们这两个请求是来自同一个用户。</li>
+<li>会话控制的思想是指能够在网站中根据一个会话跟踪用户。如果我们做到了这一点，对于用户登录的支持就很容易做到，并根据其授权级别和个人喜好来显示相应的内容。</li>
+<li>PHP的会话是通过唯一的会话ID来驱动的，会话ID是一个加密的随机数字。会话ID由PHP生成，在会话的生命周期中保存在客户端。它可以保存在用户机器里的cookie中，或者通过URL在网络上传递。</li>
+<li>会话ID就像一把钥匙，它允许我们注册一些特定的变量，称为会话变量。这些变量的内容保存在服务器端，会话ID是客户端唯一可见的信息。</li>
+</ul>
+<a id="more"></a>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p><strong>cookie</strong></p>
+<ul>
+<li>cookie其实是一小段信息，它可以由脚本在客户端机器保存。</li>
+<li>通俗的讲，服务器设置某个值,如“username=DragonFly”，并把此值交给浏览器，当浏览器再次访问服务器的时候，把此值带过来，并由服务器检测此值。这种键值变量，就叫做cookie。</li>
+<li>当浏览器连接一个URL时，首先要搜索当地保存的cookie。如果有任何与正在连接的URL相关的cookie，浏览器将它提交到服务器。</li>
+<li>在PHP里，读取cookie不用特殊的方法，因为cookie的信息已经被PHP处理到$_COOKIE这个超级全局数组里了。</li>
+<li>cookie的作用域，一个页面设置的cookie，默认在其同级目录下及子目录下可以读取。如果想让cookie在整站有效，可以在跟目录下设置cookie，也可以通过setcookie的第4个参数来设置。</li>
+</ul>
+<p><strong>session</strong></p>
+<ul>
+<li>当用户第一次登入或浏览该网站的时候，站点会生成一个会话ID并通过cookie传给服务器。</li>
+<li>再当用户点开该站点另一个页面的时候，浏览器开始连接这个URL。连接之前，浏览器会游览本地储存的cookie，如果在cookie中有任何与正在连接的URL相关的cookie，就将它提交到服务器。因而，第一次登入时，已经产生了一个与该网站URL相关的cookie(保存的会话ID)，所以当用户再次连接该网站时，站点可以通过这个会话ID识别用户，从服务器的会话文件中取出与这个会话ID有关的会话变量，从而保持事务之间的连续。</li>
+</ul>
+<h2 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h2><p><strong>setcookie参数详解</strong></p>
+<p><code>bool setcookie ( string $name [, string $value = &quot;&quot; [, int $expire = 0 [, string $path = &quot;&quot; [, string $domain = &quot;&quot; [, bool $secure = false [, bool $httponly = false ]]]]]] )</code></p>
+<ul>
+<li>$name,必选参数，是cookie的变量名，可以通过$_COOKIE[‘username’]调用变量名为username的值。</li>
+<li>$value,可选参数，是cookie的值，默认为null，如果不填，$_COOKIE调用不到。</li>
+<li>$expire,可选参数，用来设置cookie变量保存的时间,注意其设置时是以UNIX时间戳为基准，例如time()+16，意味着这个变量保存16秒，之后被删除。如果我们设置的时间戳时候小于当前时间戳，例如setcookie(‘username’,’DragonFly’,time()-1),那么username这个cookie变量就会被删除。<br>默认值为0，其变量保存时间为当前会话结束，也就是关闭游览器。</li>
+<li>$path,可选参数，cookie的有效范围，这个参数是下一个参数domain基础上的有效范围，如果path设置为’/‘,那么整个domian都有效。如果设置为’/test’,那么只有cookie只有在domain的test及其子目录下才有效。默认作用域是当前页面设置的cookie，其同级目录下以以及子目录下可以读取。</li>
+<li>$domain,cookie有效的域名,如果domain设置为dragonflyxd.com,那么在dragonflyxd.com及其子域名都能读取cookie。</li>
+<li>$secure,cookie是否仅通过安全的https，如果设置为true，cookie只有在https连接上有效。默认为false，表示cookie在http和https上均有效。</li>
+<li>$httponly,如果设置为true，那么cookie只能通过http访问。这就意味着，cookie不能通过脚本语言访问，例如JavaScript。默认值为false。</li>
+</ul>
+<p><strong>session的基本步骤</strong></p>
+<ul>
+<li><p>开始一个会话。调用session_start([array $options=[]])函数即可。该函数的参数是一个关联数组，如果提供，那么会用其中的项目覆盖会话配置指示中的配置项。例如session_start([‘cookie_lifetime’=&gt;86400,])，表示设置cookie的有效时间为1天。在php.ini里，默认session_start为手动开启一个会话，session_auto_start=1，则为自动开启。</p>
+</li>
+<li><p>注册会话变量。会话变量保存在超级全局数组$_SESSION中。要创建一个会话变量，只要在数组中设置一个元素即可，例如$_SESSION[‘name’]=’DF’。<br>默认情况下，session.cookie_path = /，即cookie的作用范围为整个domain；session.cookie_lifetime = 0，cookie的生命周期为一个会话的结束，即关闭浏览器。</p>
+</li>
+<li>使用会话变量。即访问$_SESSION保存的变量，如echo $_SESSION[‘name’],就会打印DF。注意，访问时一定要先打开会话,否则会报一个没有设置该变量的警告。默认情况下，session的有关信息保存在temp目录下，例如session.save_path = /Applications/MAMP/tmp/php。</li>
+<li>注销变量并销毁变量。有5种方法，以下详细介绍。<ol>
+<li>调用unset方法,销毁一个会话变量。例如unset($_SESSION[‘name’])。</li>
+<li>$_SESSION[‘key’]=’’，效果同上。例如$_SESSION[[‘name’]=’’;</li>
+<li>$_SESSION=array(),销毁所有会话变量。</li>
+<li>调用session_unset(),效果同上。</li>
+<li>session_destory(),彻底销毁会话文件。</li>
+</ol>
+</li>
+</ul>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p><strong>cookie</strong></p>
+<ul>
+<li>如果cookie设置了相同的变量名，后面的cookie值会覆盖前面的cookie值。</li>
+<li>setcookie方法必须写在最前面，否则会触发warning。它之前不能有任何主体信息(即使空格也不行)，因为cookie通过头信息传输的。</li>
+<li>cookie常储存在游览器里，很容易被篡改或是伪造，因此cookie往往用来记住用户名，游览历史等安全性不高的地方。</li>
+<li>cookie可以通过session技术或是加密技巧来提高安全性。</li>
+</ul>
+<p><strong>session</strong></p>
+<ul>
+<li>session有个垃圾回收机制，session.gc_maxlifetime = 1440，即最大24分钟会清理一次失效的垃圾文件。</li>
+<li>会话ID和会话文件都会以加密的形式传输或存储。</li>
+<li>如果想让session失效，可以在php.ini设置session_cookie_lifetime的值为0。或者设置$_Session[‘time’]=登录时候的UNIX时间戳。然后想登录30分钟失效，可以检测session的开启时间。</li>
+</ul>
+<p><strong>不同点</strong></p>
+<ul>
+<li>cookie存储在客户端(浏览器上)，session存储在服务器上。</li>
+<li>cookie的变量值只能设置为字符串，而session的变量值可以是除了资源以外的所有类型。</li>
+<li>cookie的安全性低，易伪造，session的安全性相对高点。</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"># PHP</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/【PHP】文件写入时部分信息会被缓存/" rel="next" title="【PHP】文件写入时部分信息会被缓存">
+                <i class="fa fa-chevron-left"></i> 【PHP】文件写入时部分信息会被缓存
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/【PHP】Trait/" rel="prev" title="【PHP】Trait">
+                【PHP】Trait <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/smile_face_400.png"
+               alt="LongFei Chen" />
+          <p class="site-author-name" itemprop="name">LongFei Chen</p>
+           
+              <p class="site-description motion-element" itemprop="description">关于编程、生活、兴趣的个人博客</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/DragonFlyXD" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.dragonflyxd.com" target="_blank" title="诗词小筑">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  诗词小筑
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Background"><span class="nav-number">1.</span> <span class="nav-text">Background</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">2.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Description"><span class="nav-number">3.</span> <span class="nav-text">Description</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary"><span class="nav-number">4.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LongFei Chen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

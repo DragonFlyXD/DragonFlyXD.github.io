@@ -1,0 +1,819 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=monaco:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Scrapy," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="利用爬虫框架Scrapy来爬取学校阳光长跑个人信息与长跑信息，并储存在MongoDB中。
+具体步骤：
+
+模拟登陆(登陆网站)。
+爬取个人信息与长跑信息页面,并解析页面。
+存储需要的数据进MongoDB。
+
+
+以下简述具体的爬取逻辑与代码，该项目源代码。
+学习scrapy最好的方式为看官方文档，详见。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Scrapy】爬取阳光长跑信息">
+<meta property="og:url" content="http://chenlongfei.me/【Scrapy】爬取阳光长跑信息/index.html">
+<meta property="og:site_name" content="LongFei Chen">
+<meta property="og:description" content="利用爬虫框架Scrapy来爬取学校阳光长跑个人信息与长跑信息，并储存在MongoDB中。
+具体步骤：
+
+模拟登陆(登陆网站)。
+爬取个人信息与长跑信息页面,并解析页面。
+存储需要的数据进MongoDB。
+
+
+以下简述具体的爬取逻辑与代码，该项目源代码。
+学习scrapy最好的方式为看官方文档，详见。">
+<meta property="og:updated_time" content="2017-04-27T13:36:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Scrapy】爬取阳光长跑信息">
+<meta name="twitter:description" content="利用爬虫框架Scrapy来爬取学校阳光长跑个人信息与长跑信息，并储存在MongoDB中。
+具体步骤：
+
+模拟登陆(登陆网站)。
+爬取个人信息与长跑信息页面,并解析页面。
+存储需要的数据进MongoDB。
+
+
+以下简述具体的爬取逻辑与代码，该项目源代码。
+学习scrapy最好的方式为看官方文档，详见。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://chenlongfei.me/【Scrapy】爬取阳光长跑信息/"/>
+
+
+
+
+
+  <title> 【Scrapy】爬取阳光长跑信息 | LongFei Chen </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LongFei Chen</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Thunder In Everyone Of Us.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://chenlongfei.me/【Scrapy】爬取阳光长跑信息/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LongFei Chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/smile_face_400.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LongFei Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                【Scrapy】爬取阳光长跑信息
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-27T21:07:13+08:00">
+                2017-04-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Scrapy/" itemprop="url" rel="index">
+                    <span itemprop="name">Scrapy</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  956
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>利用爬虫框架<strong>Scrapy</strong>来爬取学校阳光长跑个人信息与长跑信息，并储存在<strong>MongoDB</strong>中。</p>
+<p>具体步骤：</p>
+<ul>
+<li>模拟登陆(<a href="http://hzaspt.sunnysport.org.cn/" target="_blank" rel="external">登陆网站</a>)。</li>
+<li>爬取<a href="http://hzaspt.sunnysport.org.cn/runner/index.html" target="_blank" rel="external">个人信息</a>与<a href="http://hzaspt.sunnysport.org.cn/runner/achievements.html" target="_blank" rel="external">长跑信息</a>页面,并解析页面。</li>
+<li>存储需要的数据进MongoDB。</li>
+</ul>
+<blockquote>
+<p>以下简述具体的爬取逻辑与代码，该项目<a href="https://github.com/DragonFlyXD/sunny_sport" target="_blank" rel="external">源代码</a>。</p>
+<p>学习scrapy最好的方式为看官方文档，<a href="https://doc.scrapy.org/en/latest/index.html" target="_blank" rel="external">详见</a>。</p>
+</blockquote>
+<a id="more"></a>
+<ul>
+<li><p>创建<strong>Scrapy</strong>项目。</p>
+<p><code>scrapy startproject sunny_sport</code></p>
+</li>
+<li><p>创建爬虫。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># 该命令样式</div><div class="line"># scrapy genspider mydomain mydomain.com</div><div class="line">scrapy genspider sunnysport hzaspt.sunnysport.org.cn</div></pre></td></tr></table></figure>
+</li>
+<li><p>配置该项目相关配置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"># sunny_sport/sunny_sport/settings.py</div><div class="line"># 以下为添加的配置</div><div class="line"></div><div class="line"># 不遵循 robots.txt 的规则</div><div class="line">ROBOTSTXT_OBEY = False</div><div class="line"></div><div class="line"># 开启 cookies 的 debug</div><div class="line">COOKIES_DEBUG = True</div><div class="line"></div><div class="line"># 设置请求头信息</div><div class="line">DEFAULT_REQUEST_HEADERS = &#123;</div><div class="line">    &apos;Accept&apos;: &apos;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&apos;,</div><div class="line">    &apos;Accept-Language&apos;: &apos;zh-CN,zh;q=0.8,en;q=0.6&apos;,</div><div class="line">    &apos;User-Agent&apos;: &apos;Mozilla/5.0 (Macintosh;&apos;</div><div class="line">                  &apos; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko)&apos;</div><div class="line">                  &apos; Chrome/57.0.2987.133 Safari/537.36&apos;</div><div class="line">&#125;</div><div class="line"></div><div class="line"># 激活 MongoDB 的 pipeline</div><div class="line">ITEM_PIPELINES = &#123;</div><div class="line">   &apos;sunny_sport.pipelines.MongoPipeline&apos;: 300,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>编写爬取的个人信息<strong>Item</strong>与长跑信息<strong>Item</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"># sunny_sport/sunny_sport/items.py</div><div class="line"></div><div class="line"># -*- coding: utf-8 -*-</div><div class="line">from scrapy import Item, Field</div><div class="line"></div><div class="line"></div><div class="line">class StudentItem(Item):</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    name 姓名</div><div class="line">    student_num 学号</div><div class="line">    total_mileage 总里程</div><div class="line">    total_avg_speed 总平均速度</div><div class="line">    valid_cnt 有效次数</div><div class="line">    &quot;&quot;&quot;</div><div class="line"></div><div class="line">    name = Field()</div><div class="line">    student_num = Field()</div><div class="line">    total_mileage = Field()</div><div class="line">    total_avg_speed = Field()</div><div class="line">    valid_cnt = Field()</div><div class="line"></div><div class="line"></div><div class="line">class SportItem(Item):</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    cnt 长跑次数</div><div class="line">    date 长跑日期</div><div class="line">    time 长跑时段</div><div class="line">    mileage 长跑里程</div><div class="line">    avg_speed 长跑平均速度</div><div class="line">    is_valid 长跑是否有效 (1有效 0无效)</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    cnt = Field()</div><div class="line">    date = Field()</div><div class="line">    time = Field()</div><div class="line">    mileage = Field()</div><div class="line">    avg_speed = Field()</div><div class="line">    is_valid = Field()</div></pre></td></tr></table></figure>
+</li>
+<li><p>编写爬虫逻辑代码。</p>
+<blockquote>
+<p>需要注意的是，Scrapy框架会自动处理你的cookie，详见<a href="https://doc.scrapy.org/en/latest/topics/downloader-middleware.html" target="_blank" rel="external">CookiesMiddleware</a>。</p>
+<p>只需要在请求的时候在 <code>meta</code> 添加 <code>cookiejar</code> 即可。</p>
+<p>不过在该项目使用之后出现了<strong>302</strong>重定向，即未取得<strong>cookie</strong>值，目前尚未通晓什么原因，后续更新…</p>
+<p>因此，在该项目中我先登录一遍页面获取了<strong>cookie</strong>值后直接添加请求中，略显笨拙。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div></pre></td><td class="code"><pre><div class="line"># sunny_sport/sunny_sport/spiders/sunnysport.py</div><div class="line"></div><div class="line"># -*- coding: utf-8 -*-</div><div class="line"></div><div class="line">from scrapy.http import Request, FormRequest</div><div class="line">from scrapy.spiders import CrawlSpider</div><div class="line">from sunny_sport.items import StudentItem, SportItem</div><div class="line"></div><div class="line"></div><div class="line">class SunnysportSpider(CrawlSpider):</div><div class="line">    name = &quot;sunnysport&quot;</div><div class="line">    allowed_domains = [&quot;hzaspt.sunnysport.org.cn&quot;]</div><div class="line">    start_url = &apos;http://hzaspt.sunnysport.org.cn/runner/index.html&apos;</div><div class="line"></div><div class="line">    def start_requests(self):</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        模拟表单登录</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        return [FormRequest(</div><div class="line">            url=&apos;http://hzaspt.sunnysport.org.cn/login/&apos;,</div><div class="line">            formdata=&#123;</div><div class="line">                &apos;username&apos;: &apos;2015002507&apos;,</div><div class="line">                &apos;password&apos;: &apos;2015002507&apos;</div><div class="line">            &#125;,</div><div class="line">            # meta=&#123;&apos;cookiejar&apos;: 1&#125;,</div><div class="line">            callback=self.after_login</div><div class="line">        )]</div><div class="line"></div><div class="line">    def after_login(self, response):</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        登录后，爬取基本信息页面和长跑信息页面</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        return [Request(</div><div class="line">            url=self.start_url,</div><div class="line">            # meta=&#123;&apos;cookiejar&apos;: response.meta[&apos;cookiejar&apos;]&#125;,</div><div class="line">            cookies=&#123;&apos;sessionid&apos;: &apos;clyid4a5s1c81hpygz2a26iqovla78jz&apos;&#125;,</div><div class="line">            dont_filter=True,</div><div class="line">            callback=self.parse_main_page</div><div class="line">        )]</div><div class="line"></div><div class="line">    def parse_main_page(self, response):</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        解析个人信息页面</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        name = response.xpath(&apos;//div[@class=&quot;col-md-3&quot;][1]/div[1]/div[2]/label/text()&apos;).extract_first()</div><div class="line">        student_num = response.xpath(&apos;//div[@class=&quot;col-md-3&quot;][1]/div[1]/div[3]/label/text()&apos;).extract_first()</div><div class="line">        total_mileage = response.xpath(&apos;//div[@class=&quot;col-md-3&quot;][2]/div[1]/div[2]//tr[1]/td[2]/text()&apos;).extract_first()</div><div class="line">        total_avg_speed = response.xpath(</div><div class="line">            &apos;//div[@class=&quot;col-md-3&quot;][2]/div[1]/div[2]//tr[2]/td[2]/text()&apos;).extract_first()</div><div class="line">        valid_cnt = response.xpath(&apos;//div[@class=&quot;col-md-3&quot;][2]/div[1]/div[2]//tr[3]/td[2]/text()&apos;).extract_first()</div><div class="line">        yield StudentItem(</div><div class="line">            name=name,</div><div class="line">            student_num=student_num,</div><div class="line">            total_mileage=total_mileage,</div><div class="line">            total_avg_speed=total_avg_speed,</div><div class="line">            valid_cnt=valid_cnt</div><div class="line">        )</div><div class="line"></div><div class="line">        yield Request(</div><div class="line">            url=&apos;http://hzaspt.sunnysport.org.cn/runner/achievements.html&apos;,</div><div class="line">            # meta=&#123;&apos;cookiejar&apos;: response.meta[&apos;cookiejar&apos;]&#125;,</div><div class="line">            cookies=&#123;&apos;sessionid&apos;: &apos;clyid4a5s1c81hpygz2a26iqovla78jz&apos;&#125;,</div><div class="line">            callback=self.parse_sport_page</div><div class="line">        )</div><div class="line"></div><div class="line">    def parse_sport_page(self, response):</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        解析长跑信息</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        trs = response.xpath(&apos;//div[@class=&quot;col-md-8&quot;]//tbody/tr&apos;)</div><div class="line">        for tr in trs:</div><div class="line">            cnt = tr.xpath(&apos;.//td[1]/text()&apos;).extract_first()</div><div class="line">            date = tr.xpath(&apos;.//td[2]/text()&apos;).extract_first()</div><div class="line">            time = tr.xpath(&apos;.//td[3]/text()&apos;).extract_first()</div><div class="line">            mileage = tr.xpath(&apos;.//td[4]/text()&apos;).extract_first()</div><div class="line">            avg_speed = tr.xpath(&apos;.//td[5]/text()&apos;).extract_first()</div><div class="line">            is_valid = tr.xpath(&apos;.//td[6]/span[contains(@class,&quot;glyphicon-ok&quot;)]&apos;).extract_first() and 1 or 0</div><div class="line">            yield SportItem(</div><div class="line">                cnt=cnt,</div><div class="line">                date=date,</div><div class="line">                time=time,</div><div class="line">                mileage=mileage,</div><div class="line">                avg_speed=avg_speed,</div><div class="line">                is_valid=is_valid</div><div class="line">            )</div></pre></td></tr></table></figure>
+</li>
+<li><p>将爬取的数据储存进MongoDB中。</p>
+<blockquote>
+<p><strong>pipeline</strong>就像管道一样，将你之前定义的<strong>Item</strong>输入具体目的地。</p>
+<p>使用前要安装MongoDB与pymongo包。</p>
+<p>如何在Mac下使用MongoDB，请参见我之前的<a href="http://chenlongfei.me/%E3%80%90MongoDB%E3%80%91Mac%E4%B8%8B%E4%BD%BF%E7%94%A8MongoDB/">博文</a>。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"># sunny_sport/sunny_sport/pipelines.py</div><div class="line"></div><div class="line"></div><div class="line"># -*- coding: utf-8 -*-</div><div class="line"></div><div class="line">import pymongo</div><div class="line"></div><div class="line"></div><div class="line">class MongoPipeline(object):</div><div class="line">    collection_name = &apos;sunny_sport&apos;</div><div class="line"></div><div class="line">    def __init__(self, mongo_uri, mongo_db):</div><div class="line">        self.mongo_uri = mongo_uri</div><div class="line">        self.mongo_db = mongo_db</div><div class="line"></div><div class="line">    @classmethod</div><div class="line">    def from_crawler(cls, crawler):</div><div class="line">        return cls(</div><div class="line">            mongo_uri=crawler.settings.get(&apos;MONGO_URI&apos;),</div><div class="line">            mongo_db=crawler.settings.get(&apos;MONGO_DATABASE&apos;, &apos;test&apos;)</div><div class="line">        )</div><div class="line"></div><div class="line">    def open_spider(self, spider):</div><div class="line">        self.client = pymongo.MongoClient(self.mongo_uri)</div><div class="line">        self.db = self.client[self.mongo_db]</div><div class="line"></div><div class="line">    def close_spider(self, spider):</div><div class="line">        self.client.close()</div><div class="line"></div><div class="line">    def process_item(self, item, spider):</div><div class="line">        self.db[self.collection_name].insert(dict(item))</div><div class="line">        return item</div></pre></td></tr></table></figure>
+</li>
+<li><p>运行该项目。</p>
+<p>在终端输入 <code>scrapy crawl sunnysport</code> 即可。</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Scrapy/" rel="tag"># Scrapy</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/【MongoDB】Mac下使用MongoDB/" rel="next" title="【MongoDB】Mac下使用MongoDB">
+                <i class="fa fa-chevron-left"></i> 【MongoDB】Mac下使用MongoDB
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/【Laravel】修改auth和guest中间件的重定向地址/" rel="prev" title="【Laravel】修改auth和guest中间件的重定向地址">
+                【Laravel】修改auth和guest中间件的重定向地址 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/smile_face_400.png"
+               alt="LongFei Chen" />
+          <p class="site-author-name" itemprop="name">LongFei Chen</p>
+           
+              <p class="site-description motion-element" itemprop="description">关于编程、生活、兴趣的个人博客</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/DragonFlyXD" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.dragonflyxd.com" target="_blank" title="诗词小筑">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  诗词小筑
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LongFei Chen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,851 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=monaco:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="PHP," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="初识递归写个sum函数，求1-n的和。无赖法：
+12345678910function sum($n)&amp;#123;  if ($n&amp;gt;1)&amp;#123;  	return sum($n-1)+$n;  &amp;#125;  if ($n=1)&amp;#123;  	return 1;  &amp;#125;&amp;#125;echo sum(100);           //5050
+Description:
+例如老师">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【PHP】递归">
+<meta property="og:url" content="http://chenlongfei.me/【PHP】递归/index.html">
+<meta property="og:site_name" content="LongFei Chen">
+<meta property="og:description" content="初识递归写个sum函数，求1-n的和。无赖法：
+12345678910function sum($n)&amp;#123;  if ($n&amp;gt;1)&amp;#123;  	return sum($n-1)+$n;  &amp;#125;  if ($n=1)&amp;#123;  	return 1;  &amp;#125;&amp;#125;echo sum(100);           //5050
+Description:
+例如老师">
+<meta property="og:updated_time" content="2017-03-28T08:31:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【PHP】递归">
+<meta name="twitter:description" content="初识递归写个sum函数，求1-n的和。无赖法：
+12345678910function sum($n)&amp;#123;  if ($n&amp;gt;1)&amp;#123;  	return sum($n-1)+$n;  &amp;#125;  if ($n=1)&amp;#123;  	return 1;  &amp;#125;&amp;#125;echo sum(100);           //5050
+Description:
+例如老师">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://chenlongfei.me/【PHP】递归/"/>
+
+
+
+
+
+  <title> 【PHP】递归 | LongFei Chen </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LongFei Chen</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Thunder In Everyone Of Us.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://chenlongfei.me/【PHP】递归/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LongFei Chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/smile_face_400.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LongFei Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                【PHP】递归
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-28T14:56:54+08:00">
+                2017-03-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1,006
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="初识递归"><a href="#初识递归" class="headerlink" title="初识递归"></a>初识递归</h2><h3 id="写个sum函数，求1-n的和。"><a href="#写个sum函数，求1-n的和。" class="headerlink" title="写个sum函数，求1-n的和。"></a>写个sum函数，求1-n的和。</h3><p><strong>无赖法：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function sum($n)&#123;</div><div class="line">  if ($n&gt;1)&#123;</div><div class="line">  	return sum($n-1)+$n;</div><div class="line">  &#125;</div><div class="line">  if ($n=1)&#123;</div><div class="line">  	return 1;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">echo sum(100);           //5050</div></pre></td></tr></table></figure>
+<p><strong>Description:</strong></p>
+<p>例如老师问我1-100之间的和，我不会求，但我偏想回答，硬是说会，老师则开始问。</p>
+<ul>
+<li>问：sum(100)为多少？</li>
+<li>答：sum(99)+100</li>
+<li>问：……</li>
+<li>答：……</li>
+<li>问：sum(2)呢？</li>
+<li>答：sum(1)+2</li>
+</ul>
+<a id="more"></a>
+<h2 id="深识递归"><a href="#深识递归" class="headerlink" title="深识递归"></a>深识递归</h2><p><strong>级联打印指定目录</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">function recDir($root)</div><div class="line">&#123;</div><div class="line">    $path = opendir($root);</div><div class="line">    echo &quot;&lt;ul&gt;&quot;;</div><div class="line">    while (($file = readdir($path)) !== false) &#123;</div><div class="line">        if ($file == &apos;.&apos; || $file == &apos;..&apos; || $file == &apos;.DS_Store&apos;) &#123;</div><div class="line">            continue;</div><div class="line">        &#125;</div><div class="line">        echo &apos;&lt;li&gt;&apos;.$file . &apos;&lt;/li&gt;&apos;;</div><div class="line">        if (is_dir($root . &apos;/&apos; . $file)) &#123;</div><div class="line">            recDir($root . &apos;/&apos; . $file);            //如果是目录，递归调用自己</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    echo &quot;&lt;/ul&gt;&quot;;</div><div class="line"></div><div class="line">    closedir($path);</div><div class="line">&#125;</div><div class="line"></div><div class="line">recDir(&apos;../util&apos;);</div></pre></td></tr></table></figure>
+<p><strong>Description:</strong></p>
+<ul>
+<li>这个方法类似于DOS下的tree命令。</li>
+<li>可以把整个过程解释猴子拔毛摘桃子的过程。</li>
+</ul>
+<p><strong>猴子摘桃子</strong></p>
+<ul>
+<li>假设有一头猴子，它看中了山崖上的一棵桃树上的桃子。奈何地形崎岖，它无从下手。</li>
+<li>它灵机一动，拔毛一吹，变了几头猴子，让它们手握着手去摘，但还是够不着。然后它就一直拔毛直到够着为止。</li>
+<li>先变得猴子离桃树最远，而后变得猴子则靠近桃树。</li>
+<li>当最远地方的猴子摘到桃子后，依次向前传递。</li>
+<li>因此较远地方的猴子能最先接到桃子，而离猴子本尊较劲的猴子则最晚接到桃子。</li>
+<li>当猴子本尊接到桃子后，这个猴子摘桃子过程就算结束了。</li>
+</ul>
+<p><strong>NOTE：</strong></p>
+<ul>
+<li>猴子拔毛造猴子就是再调用一次函数，耗费内存资源，倘若层数过深，不宜使用递归。</li>
+<li>如果桃树无限远，猴子拔毛的过程就会一直持续，永远得不到结果。</li>
+</ul>
+<p><strong>Summary：</strong></p>
+<ul>
+<li>猴子拔毛的过程即递归，函数自己调用自己。</li>
+<li>必须有一个终止条件。</li>
+</ul>
+<h2 id="挑战递归"><a href="#挑战递归" class="headerlink" title="挑战递归"></a>挑战递归</h2><p><strong>级联创建目录</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">function mk_dir($path)</div><div class="line">&#123;</div><div class="line"></div><div class="line">    //如果目录存在,则返回该目录</div><div class="line">    if (is_dir($path)) &#123;</div><div class="line">        return true;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //如果目录不存在,则创建它。(假如创建目标父目录不存在,创建会失败)</div><div class="line">    //如果父目录不存在,创建父目录。如果存在,则创建目录。</div><div class="line">    return is_dir(dirname($path)) || mkdir(dirname($path)) ? mkdir($path) : false;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>Description:</strong></p>
+<ul>
+<li>利用递归级联创建目录</li>
+<li>但在实际开发中不必如此，php的mkdir函数封装了级联创建目录的方法。</li>
+<li>bool mkdir ( string $pathname [, int $mode = 0777 [, bool $recursive = false [, resource $context ]]] )。只用把recursize参数该为true就行了。</li>
+</ul>
+<p><strong>级联删除目录</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">function rm_dir($path)</div><div class="line">&#123;</div><div class="line"></div><div class="line">    //如果该目录不存在,则返回false</div><div class="line">    if (!is_dir($path)) &#123;</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //如果该目录下无子目录和文件,则删除该目录</div><div class="line">    //如果该目录有子目录或文件,则递归删除</div><div class="line">    $opdir = opendir($path);</div><div class="line">    while (($file = readdir($opdir)) !== false) &#123;</div><div class="line">        if ($file == &apos;.&apos; || $file == &apos;..&apos; || $file == &apos;.DS_Store&apos;) &#123;</div><div class="line">            continue;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        //判断是否为普通文件</div><div class="line">        if (!is_dir($path . &apos;/&apos; . $file)) &#123;</div><div class="line">            unlink($path . &apos;/&apos; . $file);</div><div class="line">        &#125; else &#123;</div><div class="line">            rm_dir($path . &apos;/&apos; . $file);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    closedir($opdir);</div><div class="line">    rmdir($path);</div><div class="line">    return true;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>Description</strong></p>
+<ul>
+<li>利用递归级联删除目录</li>
+<li>注意在Linux及类Linux系统下的文件操作权限问题</li>
+</ul>
+<h2 id="递归与迭代的关联"><a href="#递归与迭代的关联" class="headerlink" title="递归与迭代的关联"></a>递归与迭代的关联</h2><p><strong>定义:</strong></p>
+<ul>
+<li>递归：重复调用函数自身实现循环</li>
+<li>迭代：函数内某段代码实现循环</li>
+</ul>
+<p><strong>理论上：(借助栈)递归都是可以转化成迭代的</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">function mk_dir($path)</div><div class="line">&#123;</div><div class="line"></div><div class="line">  //新建一个数组,做&quot;工作表&quot;,即存放要创建的目录列表</div><div class="line">  $arr = array();</div><div class="line"></div><div class="line">  //如果目录不存在,则把它放进&quot;工作表&quot;里</div><div class="line">  //模仿栈,last-in,first-out,LIFO(后进先出)</div><div class="line">  while (!is_dir($path)) &#123;</div><div class="line">    array_push($arr, $path);      //工作内容入栈</div><div class="line">    $path = dirname($path);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  //如果&quot;工作表&quot;里无事情要做,则返回true</div><div class="line">  if (empty($arr)) &#123;</div><div class="line"> 	 return true;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  //工作内容出栈</div><div class="line">  while (count($arr)) &#123;</div><div class="line">  	mkdir(array_pop($arr));</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  return true;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>利用迭代实现级联创建目录</li>
+<li>借助栈(后进先出)来实现。</li>
+<li>能用迭代则尽量不用递归，因为递归调用太多函数，耗费内存资源。</li>
+</ul>
+<p><strong>递归转义</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">function _addslashes($arr)</div><div class="line">&#123;</div><div class="line"></div><div class="line">    //遍历数组</div><div class="line">    foreach ($arr as $k =&gt; $v) &#123;</div><div class="line">        if (is_string($v)) &#123;</div><div class="line">            $arr[$k] = addslashes($v);</div><div class="line">        &#125; elseif (is_array($v)) &#123;             //如果是数组,则递归调用</div><div class="line">            $arr[$k] = _addslashes($v);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return $arr;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>_addslashes能实现多维数组的引用字符串的转义。</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"># PHP</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/【PHP】文件操作与正则表达式/" rel="next" title="【PHP】文件操作与正则表达式">
+                <i class="fa fa-chevron-left"></i> 【PHP】文件操作与正则表达式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/【PHP】无限级分类/" rel="prev" title="【PHP】无限级分类">
+                【PHP】无限级分类 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/smile_face_400.png"
+               alt="LongFei Chen" />
+          <p class="site-author-name" itemprop="name">LongFei Chen</p>
+           
+              <p class="site-description motion-element" itemprop="description">关于编程、生活、兴趣的个人博客</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/DragonFlyXD" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.dragonflyxd.com" target="_blank" title="诗词小筑">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  诗词小筑
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#初识递归"><span class="nav-number">1.</span> <span class="nav-text">初识递归</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#写个sum函数，求1-n的和。"><span class="nav-number">1.1.</span> <span class="nav-text">写个sum函数，求1-n的和。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#深识递归"><span class="nav-number">2.</span> <span class="nav-text">深识递归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#挑战递归"><span class="nav-number">3.</span> <span class="nav-text">挑战递归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#递归与迭代的关联"><span class="nav-number">4.</span> <span class="nav-text">递归与迭代的关联</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LongFei Chen</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
