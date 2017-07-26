@@ -388,20 +388,20 @@
 
       
         
-          
-            <p>个人的<a href="dragonflyxd.com">诗词网站</a>前台页面采用单页设计，由<strong>Vue.js</strong>编写。</p>
-<p>其中的字体库引入了开源的<strong><a href="http://fontawesome.dashgame.com/" target="_blank" rel="external">font-awesome</a></strong>，不过项目打包上传至服务器后出现了字体找不到的错误？</p>
+          <p>个人的<a href="http://www.dragonflyxd.com">诗词网站</a>前台页面采用单页设计，由<strong>Vue.js</strong>编写。</p>
+<p>其中的字体库引入了开源的<strong><a href="http://fontawesome.dashgame.com/">font-awesome</a></strong>，不过项目打包上传至服务器后出现了字体找不到的错误？</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">❌ GET http://www.dragonflyxd.com/static/fonts/fontawesome-webfont.af7ae50.woff2</div></pre></td></tr></table></figure>
 <p>起初以为是资源的路径不对，后排查一番，路径没有任何错误。</p>
 <blockquote>
 <p>以下就叙述如何解决Fonts Not Found的问题。</p>
 </blockquote>
-<p>究其根源，原是<strong>url-loader</strong>做了手脚，它对文件大小做了限制。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"># ./build/wenpack.base.conf.js</div><div class="line"></div><div class="line">&#123;</div><div class="line">  test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,</div><div class="line">  loader: &apos;url-loader&apos;,</div><div class="line">  options: &#123;</div><div class="line">  	limit: 80000, // 默认是10000</div><div class="line">  	name: utils.assetsPath(&apos;fonts/[name].[hash:7].[ext]&apos;)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>上面是<strong>url-loader</strong>匹配的字体文件，而其对字体文件大小做了限制，<strong>limit</strong>默认值是<strong>10000</strong>。</p>
-<p>修改<strong>limit</strong>的值即可，直至超出字体文件的大小。</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/【Vue-js】项目打包上传后，字体Not-Found/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
